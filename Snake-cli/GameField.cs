@@ -51,9 +51,16 @@ namespace Snake_cli
             dimentions = new Point(width, height);
             player = new List<Point>(length);
             colored = coloredOutput;
+            SetupConsoleWindow();
             CreatePlayer();
             CreateFood();
             DrawBorders();
+        }
+
+        void SetupConsoleWindow()
+        {
+            Console.CursorVisible = false;
+            Console.SetWindowSize(dimentions.X + padding * 2, dimentions.Y + padding * 2);
         }
 
         bool BelongsToPlayer(int x, int y)

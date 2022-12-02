@@ -10,6 +10,8 @@
 
         static void Main(string[] args)
         {
+            Console.Title = "Snake game";
+
             Console.Write($"Game field height: ({_DEFAULT_HEIGHT}) ");
             string? buf = Console.ReadLine();
             int height = string.IsNullOrEmpty(buf) ? _DEFAULT_HEIGHT : int.Parse(buf);
@@ -23,7 +25,7 @@
             int tickInterval = string.IsNullOrEmpty(buf) ? _DEFAULT_TIMER_TICK_INTERVAL : int.Parse(buf);
 
             Console.Clear();
-            Console.CursorVisible = false;
+            
             game = new Game(width, height);
 
             DateTime timestamp = DateTime.Now;
@@ -60,7 +62,7 @@
             }
             Console.ResetColor();
             Console.Clear();
-            Console.WriteLine($"\n\nGame over. Score: {game.GetScore()}");
+            Console.WriteLine($"\n\nScore: {game.GetScore()}");
 #if RELEASE
             Console.ReadKey();
 #endif
