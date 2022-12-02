@@ -24,7 +24,7 @@
 
             Console.Clear();
             Console.CursorVisible = false;
-            game = new Game(width, height, false);
+            game = new Game(width, height);
 
             DateTime timestamp = DateTime.Now;
             int millisLeft = 0;

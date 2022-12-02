@@ -38,6 +38,10 @@ namespace Snake_cli
         readonly char playerChar = '*';
         readonly char foodChar = '&';
         readonly char borderChar = '^';
+        readonly ConsoleColor playerColor = ConsoleColor.Green;
+        readonly ConsoleColor foodColor = ConsoleColor.Red;
+        readonly ConsoleColor terrainColor = ConsoleColor.Black;
+        readonly ConsoleColor borderColor = ConsoleColor.Blue;
         readonly int padding = 1;
         readonly Point dimentions;
         readonly Random foodPositionRandomizer = new();
@@ -151,19 +155,20 @@ namespace Snake_cli
 
         void DrawBorders()
         {
+            if (colored) Console.BackgroundColor = borderColor;
             for (int i = 0; i <= dimentions.Y + padding; i++)
             {
                 Console.SetCursorPosition(i, 0);
-                Console.Write(borderChar);
+                Console.Write(colored ? ' ' : borderChar);
                 Console.SetCursorPosition(i, dimentions.X + padding);
-                Console.Write(borderChar);
+                Console.Write(colored ? ' ' : borderChar);
             }
             for (int i = 0; i <= dimentions.X + padding; i++)
             {
                 Console.SetCursorPosition(0, i);
-                Console.Write(borderChar);
+                Console.Write(colored ? ' ' : borderChar);
                 Console.SetCursorPosition(dimentions.Y + padding, i);
-                Console.Write(borderChar);
+                Console.Write(colored ? ' ' : borderChar);
             }
         }
 
@@ -178,9 +183,10 @@ namespace Snake_cli
                     Console.SetCursorPosition(i + padding, j + padding);
                     if (colored)
                     {
-                        if (BelongsToFood(i, j)) Console.BackgroundColor = ConsoleColor.Red;
-                        else if (BelongsToPlayer(i, j)) Console.BackgroundColor = ConsoleColor.Green;
-                        else Console.BackgroundColor = ConsoleColor.Blue;
+                        if (BelongsToFood(i, j)) Console.BackgroundColor = foodColor;
+                        else if (BelongsToPlayer(i, j)) Console.BackgroundColor = playerColor;
+                        else Console.BackgroundColor = terrainColor;
+                        Console.Write(' ');
                     }
                     else
                     {
@@ -222,114 +228,5 @@ namespace Snake_cli
         {
             return EatsHimself();
         }
-
-        //readonly Player player = new();
-        //readonly Random random = new();
-        //readonly TerrainBlock[,] blocks;
-
-        //public int Score { get; private set; } = 0;
-        //public int Width { get; init; }
-        //public int Height { get; init; }
-
-        //TerrainBlock? food;
-
-        //void CreateFood()
-        //{
-        //    int newFoodX = 0;
-        //    int newFoodY = 0;
-
-        //    do
-        //    {
-        //        newFoodX = random.Next(0, Width - 1);
-        //        newFoodY = random.Next(0, Height - 1);
-        //    }
-        //    while (player.ContainsBlock(newFoodX, newFoodY));
-
-        //    food = blocks[newFoodX, newFoodY];
-        //    food.PaintAsFood();
-        //}
-
-        //void CreatePlayer()
-        //{
-        //    player.Init(blocks);
-        //    player.AssignDimensions(Width, Height);
-        //}
-
-        //void UpdateScore()
-        //{
-        //    Score++;
-        //}
-
-        //void CheckCollision()
-        //{
-        //    if (player != null && food != null)
-        //    {
-        //        if (player.Head.X_ID == food.X_ID && player.Head.Y_ID == food.Y_ID)
-        //        {
-        //            player.IncreseBody();
-        //            CreateFood();
-        //            UpdateScore();
-        //        }
-        //    }
-        //}
-
-        //public void MoveRight()
-        //{
-        //    player.MoveRight(blocks);
-        //    CheckCollision();
-        //}
-
-        //public void MoveLeft()
-        //{
-        //    player.MoveLeft(blocks);
-        //    CheckCollision();
-        //}
-
-        //public void MoveUp()
-        //{
-        //    player.MoveUp(blocks);
-        //    CheckCollision();
-        //}
-
-        //public void MoveDown()
-        //{
-        //    player.MoveDown(blocks);
-        //    CheckCollision();
-        //}
-
-        //public Game(int width, int height)
-        //{
-        //    blocks = new TerrainBlock[width, height];
-        //    Width = width;
-        //    Height = height;
-        //    for (int i = 0; i < Width; i++)
-        //    {
-        //        for (int j = 0; j < Height; j++)
-        //        {
-        //            var block = new TerrainBlock()
-        //            {
-        //                X_ID = i,
-        //                Y_ID = j,
-        //            };
-        //            blocks[i, j] = block;
-        //        }
-        //    }
-        //    CreatePlayer();
-        //    CreateFood();
-        //}
-
-        //public bool GameOver()
-        //{
-        //    return player.EatsHimself();
-        //}
-
-        //public void Update()
-        //{
-        //    Console.SetCursorPosition(0, 0);
-        //    foreach (var block in blocks)
-        //    {
-        //        block.Draw();
-        //    }
-        //}
     }
 }
