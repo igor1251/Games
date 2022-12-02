@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Snake_cli
+﻿namespace Snake_cli
 {
     internal struct Point
     {
@@ -49,7 +40,7 @@ namespace Snake_cli
         public Game(int width, int height, bool coloredOutput = true)
         {
             dimentions = new Point(width, height);
-            player = new List<Point>(length);
+            player = new List<Point>(width * height);
             colored = coloredOutput;
             SetupConsoleWindow();
             CreatePlayer();
@@ -71,12 +62,6 @@ namespace Snake_cli
             }
             return false;
         }
-
-        bool BelongsToFood(int x, int y)
-        {
-            return food.X == x && food.Y == y;
-        }
-
 
         void CreatePlayer()
         {
@@ -139,14 +124,9 @@ namespace Snake_cli
             if (player.Count > length) player.RemoveAt(0);
         }
 
-        Point GetPlayerHead()
-        {
-            return player.Last();
-        }
-
         void CheckCollision()
         {
-            var head = GetPlayerHead();
+            var head = player[player.Count - 1];
             if (head.X == food.X && head.Y == food.Y)
             {
                 IncreasePlayer();
@@ -156,8 +136,12 @@ namespace Snake_cli
 
         bool EatsHimself()
         {
-            var head = GetPlayerHead();
-            return player.Where(item => item.X == head.X && item.Y == head.Y).Count() > 1;
+            var head = player[player.Count - 1];
+            for (int i = 0; i < player.Count - 2; i++)
+            {
+                if (head.X == player[i].X && head.Y == player[i].Y) return true;
+            }
+            return false;
         }
 
         void DrawBorders()
@@ -179,31 +163,31 @@ namespace Snake_cli
             }
         }
 
+        void DisableUnusedBlocks()
+        {
+            if (colored) Console.BackgroundColor = terrainColor;
+            Console.SetCursorPosition(player[0].X + padding, player[0].Y + padding);
+            Console.Write(colored ? ' ' : terrainChar);
+            Console.SetCursorPosition(food.X + padding, food.Y + padding);
+            Console.Write(colored ? ' ' : terrainChar);
+        }
+
+        void DrawFoodAndPlayer()
+        {
+            Console.SetCursorPosition(player[player.Count - 1].X + padding, player[player.Count - 1].Y + padding);
+            if (colored) Console.BackgroundColor = playerColor;
+            Console.Write(colored ? ' ' : playerChar);
+            Console.SetCursorPosition(food.X + padding, food.Y + padding);
+            if (colored) Console.BackgroundColor = foodColor;
+            Console.Write(colored ? ' ' : foodChar);
+        }
+
         public void Redraw()
         {
+            DisableUnusedBlocks();
             Move();
             CheckCollision();
-            for (int i = 0; i < dimentions.Y; i++)
-            {
-                for (int j = 0; j < dimentions.X; j++)
-                {
-                    Console.SetCursorPosition(i + padding, j + padding);
-                    if (colored)
-                    {
-                        if (BelongsToFood(i, j)) Console.BackgroundColor = foodColor;
-                        else if (BelongsToPlayer(i, j)) Console.BackgroundColor = playerColor;
-                        else Console.BackgroundColor = terrainColor;
-                        Console.Write(' ');
-                    }
-                    else
-                    {
-                        if (BelongsToFood(i, j)) Console.Write(foodChar);
-                        else if (BelongsToPlayer(i, j)) Console.Write(playerChar);
-                        else Console.Write(terrainChar);
-                    }
-                }
-            }
-            
+            DrawFoodAndPlayer();
         }
 
         public void MoveLeft()
