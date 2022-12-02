@@ -13,9 +13,9 @@ namespace Snake_cli.ndp48
 
     internal struct Point
     {
-        public int X;
-        public int Y;
-        public Point(int x, int y)
+        public sbyte X;
+        public sbyte Y;
+        public Point(sbyte x, sbyte y)
         {
             X = x;
             Y = y;
@@ -31,8 +31,8 @@ namespace Snake_cli.ndp48
 
         List<Point> player;
 
-        int length = 5;
-        int score = 0;
+        sbyte length = 5;
+        sbyte score = 0;
 
         bool colored = true;
 
@@ -44,11 +44,11 @@ namespace Snake_cli.ndp48
         readonly ConsoleColor foodColor = ConsoleColor.Red;
         readonly ConsoleColor terrainColor = ConsoleColor.Black;
         readonly ConsoleColor borderColor = ConsoleColor.Blue;
-        readonly int padding = 1;
+        readonly sbyte padding = 1;
         readonly Point dimentions;
         readonly Random foodPositionRandomizer = new Random();
 
-        public Game(int width, int height, bool coloredOutput = true)
+        public Game(sbyte width, sbyte height, bool coloredOutput = true)
         {
             dimentions = new Point(width, height);
             player = new List<Point>(width * height);
@@ -65,7 +65,7 @@ namespace Snake_cli.ndp48
             Console.SetWindowSize(dimentions.X + padding * 2, dimentions.Y + padding * 2);
         }
 
-        bool BelongsToPlayer(int x, int y)
+        bool BelongsToPlayer(sbyte x, sbyte y)
         {
             foreach (var point in player)
             {
@@ -76,7 +76,7 @@ namespace Snake_cli.ndp48
 
         void CreatePlayer()
         {
-            for (int i = 0; i < length; i++)
+            for (sbyte i = 0; i < length; i++)
             {
                 player.Add(new Point(i, 0));
             }
@@ -84,11 +84,11 @@ namespace Snake_cli.ndp48
 
         void CreateFood()
         {
-            int x, y;
+            sbyte x, y;
             do
             {
-                x = foodPositionRandomizer.Next(0, dimentions.X);
-                y = foodPositionRandomizer.Next(0, dimentions.Y);
+                x = (sbyte)foodPositionRandomizer.Next(0, dimentions.X);
+                y = (sbyte)foodPositionRandomizer.Next(0, dimentions.Y);
             }
             while (BelongsToPlayer(x, y));
             food = new Point(x, y);
@@ -121,9 +121,9 @@ namespace Snake_cli.ndp48
 
         void AdjustPlayerStep()
         {
-            if (nextPlayerStep.X < 0) nextPlayerStep.X = dimentions.X - 1;
+            if (nextPlayerStep.X < 0) nextPlayerStep.X = (sbyte)(dimentions.X - 1);
             else if (nextPlayerStep.X == dimentions.X) nextPlayerStep.X = 0;
-            if (nextPlayerStep.Y < 0) nextPlayerStep.Y = dimentions.Y - 1;
+            if (nextPlayerStep.Y < 0) nextPlayerStep.Y = (sbyte)(dimentions.Y - 1);
             else if (nextPlayerStep.Y == dimentions.Y) nextPlayerStep.Y = 0;
         }
 

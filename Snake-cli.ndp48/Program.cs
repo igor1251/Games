@@ -4,9 +4,9 @@ namespace Snake_cli.ndp48
 {
     internal class Program
     {
-        const int _DEFAULT_TIMER_TICK_INTERVAL = 100;
-        const int _DEFAULT_WIDTH = 15;
-        const int _DEFAULT_HEIGHT = 15;
+        const sbyte _DEFAULT_TIMER_TICK_INTERVAL = 100;
+        const sbyte _DEFAULT_WIDTH = 15;
+        const sbyte _DEFAULT_HEIGHT = 15;
 
         static Game game;
 
@@ -16,22 +16,22 @@ namespace Snake_cli.ndp48
 
             Console.Write($"Game field height: ({_DEFAULT_HEIGHT}) ");
             string buf = Console.ReadLine();
-            int height = string.IsNullOrEmpty(buf) ? _DEFAULT_HEIGHT : int.Parse(buf);
+            sbyte height = string.IsNullOrEmpty(buf) ? _DEFAULT_HEIGHT : sbyte.Parse(buf);
 
             Console.Write($"Game field width: ({_DEFAULT_WIDTH}) ");
             buf = Console.ReadLine();
-            int width = string.IsNullOrEmpty(buf) ? _DEFAULT_WIDTH : int.Parse(buf);
+            sbyte width = string.IsNullOrEmpty(buf) ? _DEFAULT_WIDTH : sbyte.Parse(buf);
 
             Console.Write($"Game speed: ({_DEFAULT_TIMER_TICK_INTERVAL}) ");
             buf = Console.ReadLine();
-            int tickInterval = string.IsNullOrEmpty(buf) ? _DEFAULT_TIMER_TICK_INTERVAL : int.Parse(buf);
+            sbyte tickInterval = string.IsNullOrEmpty(buf) ? _DEFAULT_TIMER_TICK_INTERVAL : sbyte.Parse(buf);
 
             Console.Clear();
 
             game = new Game(width, height);
 
             DateTime timestamp = DateTime.Now;
-            int millisLeft = 0;
+            sbyte millisLeft = 0;
 
             while (!game.GameOver())
             {
@@ -54,7 +54,7 @@ namespace Snake_cli.ndp48
                     }
                 }
 
-                millisLeft = (DateTime.Now - timestamp).Milliseconds;
+                millisLeft = (sbyte)(DateTime.Now - timestamp).Milliseconds;
                 if (millisLeft > tickInterval)
                 {
                     game.Redraw();
