@@ -34,8 +34,6 @@ namespace Snake_cli.ndp48
         byte length = 5;
         byte score = 0;
 
-        bool colored = true;
-
         const ConsoleColor playerColor = ConsoleColor.Green;
         const ConsoleColor foodColor = ConsoleColor.Red;
         const ConsoleColor terrainColor = ConsoleColor.Black;
@@ -45,7 +43,8 @@ namespace Snake_cli.ndp48
         const char playerChar = '*';
         const char foodChar = '&';
         const char borderChar = '^';
-        
+
+        readonly bool colored = true;
         readonly byte padding = 1;
         readonly Point dimentions;
         readonly Random foodPositionRandomizer = new Random();
