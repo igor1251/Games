@@ -176,7 +176,7 @@ namespace Snake_cli.ndp48
         void PaintBlock(int x, int y, ConsoleColor blockColor = terrainColor, char blockChar = terrainChar)
         {
             Console.SetCursorPosition(x, y);
-            if (colored) Console.BackgroundColor = blockColor;
+            if (colored && Console.BackgroundColor != blockColor) Console.BackgroundColor = blockColor;
             Console.Write(colored ? ' ' : blockChar);
         }
 
