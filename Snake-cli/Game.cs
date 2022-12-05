@@ -1,10 +1,21 @@
-﻿namespace Snake_cli
+﻿using System;
+using System.Collections.Generic;
+
+namespace Snake_cli
 {
+    internal enum Way
+    {
+        Left,
+        Right,
+        Up,
+        Down,
+    }
+
     internal struct Point
     {
-        public int X;
-        public int Y;
-        public Point(int x, int y)
+        public byte X;
+        public byte Y;
+        public Point(byte x, byte y)
         {
             X = x;
             Y = y;
@@ -20,24 +31,25 @@
 
         List<Point> player;
 
-        int length = 5;
-        int score = 0;
+        byte length = 5;
+        byte score = 0;
 
-        bool colored = true;
+        const ConsoleColor playerColor = ConsoleColor.Green;
+        const ConsoleColor foodColor = ConsoleColor.Red;
+        const ConsoleColor terrainColor = ConsoleColor.Black;
+        const ConsoleColor borderColor = ConsoleColor.Blue;
 
-        readonly char terrainChar = ' ';
-        readonly char playerChar = '*';
-        readonly char foodChar = '&';
-        readonly char borderChar = '^';
-        readonly ConsoleColor playerColor = ConsoleColor.Green;
-        readonly ConsoleColor foodColor = ConsoleColor.Red;
-        readonly ConsoleColor terrainColor = ConsoleColor.Black;
-        readonly ConsoleColor borderColor = ConsoleColor.Blue;
-        readonly int padding = 1;
+        const char terrainChar = ' ';
+        const char playerChar = '*';
+        const char foodChar = '&';
+        const char borderChar = '^';
+
+        readonly bool colored = true;
+        readonly byte padding = 1;
         readonly Point dimentions;
-        readonly Random foodPositionRandomizer = new();
+        readonly Random foodPositionRandomizer = new Random();
 
-        public Game(int width, int height, bool coloredOutput = true)
+        public Game(byte width, byte height, bool coloredOutput = true)
         {
             dimentions = new Point(width, height);
             player = new List<Point>(width * height);
@@ -54,7 +66,7 @@
             Console.SetWindowSize(dimentions.X + padding * 2, dimentions.Y + padding * 2);
         }
 
-        bool BelongsToPlayer(int x, int y)
+        bool BelongsToPlayer(byte x, byte y)
         {
             foreach (var point in player)
             {
@@ -65,7 +77,7 @@
 
         void CreatePlayer()
         {
-            for (int i = 0; i < length; i++)
+            for (byte i = 0; i < length; i++)
             {
                 player.Add(new Point(i, 0));
             }
@@ -73,11 +85,11 @@
 
         void CreateFood()
         {
-            int x, y;
+            byte x, y;
             do
             {
-                x = foodPositionRandomizer.Next(0, dimentions.X);
-                y = foodPositionRandomizer.Next(0, dimentions.Y);
+                x = (byte)foodPositionRandomizer.Next(0, dimentions.X);
+                y = (byte)foodPositionRandomizer.Next(0, dimentions.Y);
             }
             while (BelongsToPlayer(x, y));
             food = new Point(x, y);
@@ -87,6 +99,7 @@
         {
             length++;
             score++;
+            Console.Beep();
         }
 
         void CalculateNextPlayerStep()
@@ -94,32 +107,27 @@
             switch (way)
             {
                 case Way.Left:
-                    nextPlayerStep.X--;
+                    if (nextPlayerStep.X > 0) nextPlayerStep.X--;
+                    else nextPlayerStep.X = (byte)(dimentions.X - padding);
                     break;
                 case Way.Right:
-                    nextPlayerStep.X++;
+                    if (nextPlayerStep.X < dimentions.X - padding) nextPlayerStep.X++;
+                    else nextPlayerStep.X = 0;
                     break;
                 case Way.Up:
-                    nextPlayerStep.Y--;
+                    if (nextPlayerStep.Y > 0) nextPlayerStep.Y--;
+                    else nextPlayerStep.Y = (byte)(dimentions.Y - padding);
                     break;
                 case Way.Down:
-                    nextPlayerStep.Y++;
+                    if (nextPlayerStep.Y < dimentions.Y - padding) nextPlayerStep.Y++;
+                    else nextPlayerStep.Y = 0;
                     break;
             }
-        }
-
-        void AdjustPlayerStep()
-        {
-            if (nextPlayerStep.X < 0) nextPlayerStep.X = dimentions.X - 1;
-            else if (nextPlayerStep.X == dimentions.X) nextPlayerStep.X = 0;
-            if (nextPlayerStep.Y < 0) nextPlayerStep.Y = dimentions.Y - 1;
-            else if (nextPlayerStep.Y == dimentions.Y) nextPlayerStep.Y = 0;
         }
 
         void Move()
         {
             CalculateNextPlayerStep();
-            AdjustPlayerStep();
             player.Add(nextPlayerStep);
             if (player.Count > length) player.RemoveAt(0);
         }
@@ -149,37 +157,33 @@
             if (colored) Console.BackgroundColor = borderColor;
             for (int i = 0; i <= dimentions.Y + padding; i++)
             {
-                Console.SetCursorPosition(i, 0);
-                Console.Write(colored ? ' ' : borderChar);
-                Console.SetCursorPosition(i, dimentions.X + padding);
-                Console.Write(colored ? ' ' : borderChar);
+                PaintBlock(i, 0, borderColor, borderChar);
+                PaintBlock(i, dimentions.X + padding, borderColor, borderChar);
             }
             for (int i = 0; i <= dimentions.X + padding; i++)
             {
-                Console.SetCursorPosition(0, i);
-                Console.Write(colored ? ' ' : borderChar);
-                Console.SetCursorPosition(dimentions.Y + padding, i);
-                Console.Write(colored ? ' ' : borderChar);
+                PaintBlock(0, i, borderColor, borderChar);
+                PaintBlock(dimentions.Y + padding, i, borderColor, borderChar);
             }
         }
 
         void DisableUnusedBlocks()
         {
-            if (colored) Console.BackgroundColor = terrainColor;
-            Console.SetCursorPosition(player[0].X + padding, player[0].Y + padding);
-            Console.Write(colored ? ' ' : terrainChar);
-            Console.SetCursorPosition(food.X + padding, food.Y + padding);
-            Console.Write(colored ? ' ' : terrainChar);
+            PaintBlock(player[0].X + padding, player[0].Y + padding);
+            PaintBlock(food.X + padding, food.Y + padding);
+        }
+
+        void PaintBlock(int x, int y, ConsoleColor blockColor = terrainColor, char blockChar = terrainChar)
+        {
+            Console.SetCursorPosition(x, y);
+            if (colored && Console.BackgroundColor != blockColor) Console.BackgroundColor = blockColor;
+            Console.Write(colored ? ' ' : blockChar);
         }
 
         void DrawFoodAndPlayer()
         {
-            Console.SetCursorPosition(player[player.Count - 1].X + padding, player[player.Count - 1].Y + padding);
-            if (colored) Console.BackgroundColor = playerColor;
-            Console.Write(colored ? ' ' : playerChar);
-            Console.SetCursorPosition(food.X + padding, food.Y + padding);
-            if (colored) Console.BackgroundColor = foodColor;
-            Console.Write(colored ? ' ' : foodChar);
+            PaintBlock(player[player.Count - 1].X + padding, player[player.Count - 1].Y + padding, playerColor, playerChar);
+            PaintBlock(food.X + padding, food.Y + padding, foodColor, foodChar);
         }
 
         public void Redraw()

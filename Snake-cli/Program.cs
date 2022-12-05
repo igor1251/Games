@@ -1,35 +1,36 @@
-﻿namespace Snake_cli
+﻿using System;
+
+namespace Snake_cli
 {
     internal class Program
     {
-        const int _DEFAULT_TIMER_TICK_INTERVAL = 100;
-        const int _DEFAULT_WIDTH = 15;
-        const int _DEFAULT_HEIGHT = 15;
+        const ushort _DEFAULT_TIMER_TICK_INTERVAL = 8000;
+        const byte _DEFAULT_WIDTH = 40;
+        const byte _DEFAULT_HEIGHT = 40;
 
         static Game game;
 
-        static void Main(string[] args)
+        static void Main()
         {
             Console.Title = "Snake game";
 
             Console.Write($"Game field height: ({_DEFAULT_HEIGHT}) ");
-            string? buf = Console.ReadLine();
-            int height = string.IsNullOrEmpty(buf) ? _DEFAULT_HEIGHT : int.Parse(buf);
-            
+            string buf = Console.ReadLine();
+            byte height = string.IsNullOrEmpty(buf) ? _DEFAULT_HEIGHT : byte.Parse(buf);
+
             Console.Write($"Game field width: ({_DEFAULT_WIDTH}) ");
             buf = Console.ReadLine();
-            int width = string.IsNullOrEmpty(buf) ? _DEFAULT_WIDTH : int.Parse(buf);
-            
+            byte width = string.IsNullOrEmpty(buf) ? _DEFAULT_WIDTH : byte.Parse(buf);
+
             Console.Write($"Game speed: ({_DEFAULT_TIMER_TICK_INTERVAL}) ");
             buf = Console.ReadLine();
-            int tickInterval = string.IsNullOrEmpty(buf) ? _DEFAULT_TIMER_TICK_INTERVAL : int.Parse(buf);
+            ushort tickInterval = string.IsNullOrEmpty(buf) ? _DEFAULT_TIMER_TICK_INTERVAL : ushort.Parse(buf);
 
             Console.Clear();
-            
+
             game = new Game(width, height);
 
-            DateTime timestamp = DateTime.Now;
-            int millisLeft = 0;
+            ushort cyclesLeft = 0;
 
             while (!game.GameOver())
             {
@@ -51,21 +52,18 @@
                             break;
                     }
                 }
-                
-                millisLeft = (DateTime.Now - timestamp).Milliseconds;  
-                if (millisLeft > tickInterval)
+                cyclesLeft++;
+                if (cyclesLeft > tickInterval)
                 {
                     game.Redraw();
-                    millisLeft = 0;
-                    timestamp = DateTime.Now;
+                    cyclesLeft = 0;
                 }
             }
             Console.ResetColor();
             Console.Clear();
             Console.WriteLine($"\n\nScore: {game.GetScore()}");
-#if RELEASE
+            Console.Beep(120, 400);
             Console.ReadKey();
-#endif
         }
     }
 }
