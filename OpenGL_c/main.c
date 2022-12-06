@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <GL/glut.h>
 #include <math.h>
+#include "game.h"
 
 const int margin = 5;
 const int edge = 25;
@@ -34,7 +35,7 @@ void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBegin(GL_LINES);
-	
+
 	for (int i = 0; i < sceneWidth; i++)
 	{
 		for (int j = 0; j < sceneHeight; j++)

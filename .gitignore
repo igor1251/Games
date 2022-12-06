@@ -5,3 +5,5 @@
 **/.vs
 **/*.user
 **/Properties
+**/x64
+*.log
