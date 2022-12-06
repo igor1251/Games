@@ -1,0 +1,5 @@
+﻿  main.c
+C:\Users\babichev.i\source\repos\OpenGL_c\main.c(36,45): warning C4305: +=: усечение из "double" в "GLfloat"
+C:\Users\babichev.i\source\repos\OpenGL_c\main.c(38,31): warning C4244: инициализация: преобразование "double" в "GLfloat", возможна потеря данных
+C:\Users\babichev.i\source\repos\OpenGL_c\main.c(38,67): warning C4244: инициализация: преобразование "double" в "GLfloat", возможна потеря данных
+  OpenGL_c.vcxproj -> C:\Users\babichev.i\source\repos\OpenGL_c\x64\Debug\OpenGL_c.exe
