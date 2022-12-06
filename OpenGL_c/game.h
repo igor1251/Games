@@ -1,21 +1,20 @@
 #pragma once
-#include <cstdbool>
 
 enum Way
 {
-	left,
-	right,
-	up,
-	down
+	left = 1,
+	right = 2,
+	up = 3,
+	down = 4
 };
 
-struct Point
-{
-	int x;
-	int y;
-};
-
-void createGame(void);
-void createPlayer(void);
-void createFood(void);
-bool belongsToPlayer(int x, int y);
+void increase(void);
+int getScore(void);
+int checkCollision(void);
+void placeFood(void);
+void move(void);
+void init(int argc, char** argv);
+void prepareWindow(void);
+void display(void);
+void timerCallback(void);
+void keyboardCallback(unsigned char symbol, int x, int y);
