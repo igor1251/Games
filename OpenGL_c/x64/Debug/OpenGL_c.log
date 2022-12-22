@@ -1,6 +1,6 @@
 ﻿  game.c
-C:\Users\babichev.i\source\repos\OpenGL_c\game.c(97,63): warning C4305: функция: усечение из "double" в "GLfloat"
-C:\Users\babichev.i\source\repos\OpenGL_c\game.c(124,34): warning C4113: "void (__cdecl *)(void)" отличается в списках параметров от "void (__cdecl *)(int)"
-C:\Users\babichev.i\source\repos\OpenGL_c\game.c(151,34): warning C4113: "void (__cdecl *)(void)" отличается в списках параметров от "void (__cdecl *)(int)"
-C:\Users\babichev.i\source\repos\OpenGL_c\game.c(67): warning C4716: checkCollision: должна возвращать значение
-  OpenGL_c.vcxproj -> C:\Users\babichev.i\source\repos\OpenGL_c\x64\Debug\OpenGL_c.exe
+F:\Libraries\Documents\GitHub\Games\OpenGL_c\game.c(122,54): warning C4305: функция: усечение из "double" в "GLfloat"
+F:\Libraries\Documents\GitHub\Games\OpenGL_c\game.c(149,34): warning C4113: "void (__cdecl *)(void)" отличается в списках параметров от "void (__cdecl *)(int)"
+F:\Libraries\Documents\GitHub\Games\OpenGL_c\game.c(179,34): warning C4113: "void (__cdecl *)(void)" отличается в списках параметров от "void (__cdecl *)(int)"
+F:\Libraries\Documents\GitHub\Games\OpenGL_c\game.c(92): warning C4716: checkCollision: должна возвращать значение
+  OpenGL_c.vcxproj -> F:\Libraries\Documents\GitHub\Games\OpenGL_c\x64\Debug\OpenGL_c.exe

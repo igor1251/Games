@@ -1,23 +1,26 @@
 #include "game.h"
 #include <GL/glut.h>
 
+#define _FULL_BODY_LENGTH 400 //sceneWidth * sceneHeight
+
 const int margin = 5;
 const int edge = 25;
 const int sceneWidth = 20;
-const int sceneHeight = 15;
+const int sceneHeight = 20;
 
+struct Point body[_FULL_BODY_LENGTH];
+
+int bodyHeadId = 0;
+int bodyTailId = 0;
 int x = 0;
 int y = 0;
-
-int player_x = 0; player_y = 0;
-int food_x = 0; food_y = 0;
-
-int score = 0;
-
 int width = 0;
 int height = 0;
+int score = 0;
+int length = 5;
 
-unsigned int elapsed = 1000;
+struct Point food;
+struct Point player;
 
 enum Way way = right;
 
@@ -26,39 +29,61 @@ void move(void)
 	switch (way)
 	{
 	case left:
-		player_x--;
+		player.x--;
 		break;
 	case right:
-		player_x++;
+		player.x++;
 		break;
 	case up:
-		player_y--;
+		player.y--;
 		break;
 	case down:
-		player_y++;
+		player.y++;
 		break;
 	}
-	if (player_y < 0) player_y = sceneHeight - 1;
-	else if (player_y == sceneHeight) player_y = 0;
+	if (player.y < 0) player.y = sceneHeight - 1;
+	else if (player.y == sceneHeight) player.y = 0;
 
-	if (player_x < 0) player_x = sceneWidth - 1;
-	if (player_x == sceneWidth) player_x = 0;
+	if (player.x < 0) player.x = sceneWidth - 1;
+	if (player.x == sceneWidth) player.x = 0;
 }
 
 void placeFood(void)
 {
-	food_x += 2;
-	food_y += 1;
+	food.x += 2;
+	food.y += 1;
+}
+
+int belongsToPlayer(int x, int y)
+{
+	for (int i = bodyHeadId; i <= bodyTailId; i++)
+	{
+		if (x == body[i].x && y == body[i].y) return 1;
+	}
+	return 0;
+}
+
+void placePlayer(void)
+{
+	for (int i = 0; i < length; i++)
+	{
+		body[i].x = i;
+		body[i].y = 0;
+	}
+	bodyHeadId = 0;
+	bodyTailId = length - 1;
+	player.x = 0;
+	player.y = 0;
 }
 
 void increase(void)
 {
-
+	length++;
 }
 
 int checkCollision(void)
 {
-	if (player_x == food_x && player_y == food_y)
+	if (player.x == food.x && player.y == food.y)
 	{
 		score++;
 		increase();
@@ -94,8 +119,8 @@ void display(void)
 			x = (edge + margin) * i;
 			y = (edge + margin) * j;
 
-			if (i == player_x && j == player_y) glColor3f(1.0, 1.0, 0.3);
-			else if (i == food_x && j == food_y) glColor3f(1.0, 0.0, 0.0);
+			if (belongsToPlayer(i, j)) glColor3f(1.0, 1.0, 0.3);
+			else if (i == food.x && j == food.y) glColor3f(1.0, 0.0, 0.0);
 			else glColor3f(0.0, 1.0, 0.0);
 
 			glVertex2i(x, y);
@@ -145,6 +170,9 @@ void init(int argc, char** argv)
 	glutCreateWindow("Snake");
 
 	prepareWindow();
+	placeFood();
+	placePlayer();
+
 
 	glutKeyboardUpFunc(keyboardCallback);
 	glutDisplayFunc(display);
